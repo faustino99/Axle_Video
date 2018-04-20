@@ -1,1 +1,8 @@
-# Axle_Video
+# Axle Video Transcode Project
+This repository is for a project for a multi-media management company called Axle Video to transcode media files efficiently across a local network of servers. This code uses Celery, an open-source distributed task queue system, RabbitMQ, an open-source messaging broker, and a postgreSQL server used to store data.
+
+The driver.py file tests out the code for this project on a small scale by creating 3 local Celery worker instances on a local RabbitMQ server and adds several random transcoding tasks (transcoding random.mp4 and random2.mp4 in different ways) to the queue on a local SQL server (SQLDatabase.py is used to add tasks to the database). The driver.py file calls the transcode function in the Converter.py file, which is the main code of the project. The DConverter.py file is used by the celery worker instances to execute their transcode tasks ussing the open-source transcoding library FFMPEG.
+
+The transcode program on Converter.py uses file size and worker speed (if worker instances are being run on multiple computers with different processing speeds) to determine which transcode tasks to delegate to which worker instance. This is highly customizable, with the user being capable of specifying which workers have faster processing speeds, the cutoff size for what should be considered a 'large' task, and whether slower workers should be allowed to transcode larger tasks when faster workers are overwhelmed with tasks.
+
+Although driver.py only tests out this project on a single computer, this project can be configured on multiple computers on the same local network to remotely access the same queue of tasks via the RabbitMQ messaging broker. 
